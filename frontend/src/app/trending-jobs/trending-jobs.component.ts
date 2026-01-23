@@ -1,4 +1,4 @@
-import { Component , OnInit } from '@angular/core';
+import { Component , OnInit , signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { JobserviceService } from '../service/jobServices/jobservice.service';
 import { ToastrService } from 'ngx-toastr';
@@ -40,20 +40,21 @@ export class TrendingJobsComponent implements OnInit {
   jobs: Job[] = [];
   internships: Job[] = [];
   savedJobs: Job[] = [];
+  jobFetched = signal(true);
+  jobImagesFetched = signal(true);
 
   ngOnInit(): void {
     this.jobService.getAllJobs().subscribe({
     next: (jobs: JobResponse[]) => {
+        this.jobFetched.set(false);
 
-        // console.log('Fetched jobs from API:', jobs);
-
-        // Map each job and append to the appropriate array
         jobs.forEach(jobResponse => {
           const job = this.mapToJob(jobResponse);
 
           
           this.jobService.getJobImage(job.image?? '').subscribe({
             next: (imageUrl) => {
+              this.jobImagesFetched.set(false);
               job.imageUrl = imageUrl; // Set blob URL when loaded
             },
             error: (err) => console.error('Image fetch error', err)

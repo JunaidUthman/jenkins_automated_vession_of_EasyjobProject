@@ -61,6 +61,104 @@
     </div>
 
     <div class="form-group">
+      <label for="company">Company</label>
+      <input
+        type="text"
+        id="company"
+        formControlName="company"
+        class="form-control"
+        placeholder="Enter company name"
+      />
+      <div *ngIf="jobForm.get('company')?.invalid && jobForm.get('company')?.touched" class="error-message">
+        Company is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="field">Field</label>
+      <input
+        type="text"
+        id="field"
+        formControlName="field"
+        class="form-control"
+        placeholder="Enter job field"
+      />
+      <div *ngIf="jobForm.get('field')?.invalid && jobForm.get('field')?.touched" class="error-message">
+        Field is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="jobFunction">Function</label>
+      <input
+        type="text"
+        id="jobFunction"
+        formControlName="jobFunction"
+        class="form-control"
+        placeholder="Enter job function"
+      />
+      <div *ngIf="jobForm.get('jobFunction')?.invalid && jobForm.get('jobFunction')?.touched" class="error-message">
+        Function is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contract_type">Contract Type</label>
+      <input
+        type="text"
+        id="contract_type"
+        formControlName="contract_type"
+        class="form-control"
+        placeholder="Enter contract type"
+      />
+      <div *ngIf="jobForm.get('contract_type')?.invalid && jobForm.get('contract_type')?.touched" class="error-message">
+        Contract type is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="experienceMin">Minimum Experience</label>
+      <input
+        type="text"
+        id="experienceMin"
+        formControlName="experienceMin"
+        class="form-control"
+        placeholder="Enter minimum experience"
+      />
+      <div *ngIf="jobForm.get('experienceMin')?.invalid && jobForm.get('experienceMin')?.touched" class="error-message">
+        Minimum experience is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="experienceMax">Maximum Experience</label>
+      <input
+        type="text"
+        id="experienceMax"
+        formControlName="experienceMax"
+        class="form-control"
+        placeholder="Enter maximum experience"
+      />
+      <div *ngIf="jobForm.get('experienceMax')?.invalid && jobForm.get('experienceMax')?.touched" class="error-message">
+        Maximum experience is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="educationLevel">Education Level</label>
+      <input
+        type="text"
+        id="educationLevel"
+        formControlName="educationLevel"
+        class="form-control"
+        placeholder="Enter education level"
+      />
+      <div *ngIf="jobForm.get('educationLevel')?.invalid && jobForm.get('educationLevel')?.touched" class="error-message">
+        Education level is required.
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="image">Job Image (Optional)</label>
       <input
         type="file"

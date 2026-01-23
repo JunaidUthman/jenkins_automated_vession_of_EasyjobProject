@@ -22,7 +22,14 @@ export class CreateJobFormComponent {
       description: ['', Validators.required],
       location: ['', Validators.required],
       type: ['', Validators.required],
-      image: [null]
+      image: [null],
+      company: ['', Validators.required],
+      field: ['', Validators.required],
+      jobFunction: ['', Validators.required],
+      contract_type: ['', Validators.required],
+      experienceMin: ['', Validators.required],
+      experienceMax: ['', Validators.required],
+      educationLevel: ['', Validators.required]
     });
   }
 
@@ -44,7 +51,14 @@ export class CreateJobFormComponent {
         formValue.description,
         formValue.location,
         formValue.type,
-        this.selectedFile || undefined
+        this.selectedFile || undefined,
+        formValue.company,
+        formValue.field,
+        formValue.jobFunction,
+        formValue.contract_type,
+        formValue.experienceMin,
+        formValue.experienceMax,
+        formValue.educationLevel
       ).subscribe({
         next: (response) => {
           // alert('Job created successfully');

@@ -11,6 +11,13 @@ export interface JobRequest {
   location: string;
   type: string;
   image?: File;
+  company: string;
+  field: string;
+  jobFunction: string;
+  contract_type: string;
+  experienceMin: string;
+  experienceMax: string;
+  educationLevel: string;
 }
 
 // --------------------
@@ -22,6 +29,13 @@ export interface JobResponse {
   location: string;
   type: string;
   image?: string; // filename or URL returned from backend
+  company: string;
+  field: string;
+  jobFunction: string;
+  contract_type: string;
+  experienceMin: string;
+  experienceMax: string;
+  educationLevel: string;
   creator?: any;
 }
 
@@ -40,7 +54,14 @@ export class JobserviceService {
     description: string,
     location: string,
     type: string,
-    image?: File
+    image?: File,
+    company?: string,
+    field?: string,
+    jobFunction?: string,
+    contract_type?: string,
+    experienceMin?: string,
+    experienceMax?: string,
+    educationLevel?: string
   ): Observable<JobResponse> {
     const formData = new FormData();
     formData.append('title', title);
@@ -50,6 +71,13 @@ export class JobserviceService {
     if (image) {
       formData.append('image', image); // file uploaded to backend
     }
+    if (company) formData.append('company', company);
+    if (field) formData.append('field', field);
+    if (jobFunction) formData.append('function', jobFunction);
+    if (contract_type) formData.append('contract_type', contract_type);
+    if (experienceMin) formData.append('experienceMin', experienceMin);
+    if (experienceMax) formData.append('experienceMax', experienceMax);
+    if (educationLevel) formData.append('educationLevel', educationLevel);
 
     console.log('FormData contents for debug:');
     formData.forEach((value, key) => {

@@ -1,7 +1,9 @@
 package org.example.backend.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.backend.enums.JobType;
 
 import java.util.HashSet;
@@ -9,7 +11,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "jobs")
-@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+
 public class Job {
 
 //id of the job
@@ -21,16 +26,31 @@ public class Job {
     private String description;
     private String location;
     private String image;
+    private String company;
+    private String field;
+    private String function;
+    private String contract_type;
+    private String experienceMin;
+    private String experienceMax;
+    private String educationLevel;
     @Enumerated(EnumType.STRING)
     private JobType type;
 
-    public Job(Long id,String title, String description, String location, String image,JobType type) {
+
+    public Job(Long id, String title, String description, String location, String image, JobType type, String company, String field, String function, String contract_type, String experienceMin, String experienceMax, String educationLevel) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
         this.image = image;
         this.type = type;
+        this.company = company;
+        this.field = field;
+        this.function = function;
+        this.contract_type = contract_type;
+        this.experienceMin = experienceMin;
+        this.experienceMax = experienceMax;
+        this.educationLevel = educationLevel;
     }
 
 
@@ -43,40 +63,6 @@ public class Job {
     @ManyToMany(mappedBy = "jobs")
     private Set<User> users = new HashSet<>();
 
-    public Job() {}
-
-
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public User getCreator() { return creator; }
-    public void setCreator(User creator) { this.creator = creator; }
-
-    public Set<User> getUsers() { return users; }
-    public void setUsers(Set<User> users) { this.users = users; }
-
-    public String getImage() {
-        return image;
-    }
-    public void setImage(String image) { this.image = image; }
-
-    public JobType getType() {
-        return type;
-    }
-
-    public void setType(JobType type) {
-        this.type = type;
-    }
 
     @Override
     public String toString() {

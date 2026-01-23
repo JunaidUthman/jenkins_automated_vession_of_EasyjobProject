@@ -81,7 +81,7 @@ public class JobService {
         return Map.of("message", "Application cancelled successfully");
     }
 
-    public JobDTO createJob(String title, String description, String location, JobType type, MultipartFile image, String creatorEmail) throws Exception {
+    public JobDTO createJob(String title, String description, String location, JobType type, MultipartFile image, String creatorEmail, String company, String field, String function, String contract_type, String experienceMin, String experienceMax, String educationLevel) throws Exception {
         // Find the creator user
         User creator = userRepository.findByEmail(creatorEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -107,6 +107,13 @@ public class JobService {
         job.setImage(imageName);
         job.setType(type);
         job.setCreator(creator);
+        job.setCompany(company);
+        job.setField(field);
+        job.setFunction(function);
+        job.setContract_type(contract_type);
+        job.setExperienceMin(experienceMin);
+        job.setExperienceMax(experienceMax);
+        job.setEducationLevel(educationLevel);
 
         // Save to database
         Job savedJob = jobRepository.save(job);

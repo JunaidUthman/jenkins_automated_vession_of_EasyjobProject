@@ -111,14 +111,21 @@ public class JobController {
             @RequestParam String description,
             @RequestParam String location,
             @RequestParam(required = true) JobType type,
-            @RequestParam(required = false) MultipartFile image
+            @RequestParam(required = false) MultipartFile image,
+            @RequestParam String company,
+            @RequestParam String field,
+            @RequestParam String function,
+            @RequestParam String contract_type,
+            @RequestParam String experienceMin,
+            @RequestParam String experienceMax,
+            @RequestParam String educationLevel
     ) {
         try {
             // Get authenticated user email
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
 
-            JobDTO jobDTO = jobService.createJob(title, description, location, type, image, email);
+            JobDTO jobDTO = jobService.createJob(title, description, location, type, image, email, company, field, function, contract_type, experienceMin, experienceMax, educationLevel);
 
             // Return saved job with CREATED status
             return ResponseEntity.status(HttpStatus.CREATED).body(jobDTO);

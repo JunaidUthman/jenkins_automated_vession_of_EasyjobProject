@@ -54,7 +54,7 @@ public class SecurityConfig {// this class(esspecially SecurityFilterChain) inte
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // JWT filter to check token
-        http.addFilterBefore(new JwtAuthFilter(jwtUtil, costumeUserService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthFilter(jwtUtil, costumeUserService), UsernamePasswordAuthenticationFilter.class);//UsernamePasswordAuthenticationFilter is the default filter that processes authentication(login) requests in Spring Security.but its not used in this case because we are using JWTs.
 
         return http.build();
     }

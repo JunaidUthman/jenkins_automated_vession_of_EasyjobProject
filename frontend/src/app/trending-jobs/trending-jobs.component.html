@@ -46,7 +46,11 @@
       <div class="job-card" *ngFor="let job of displayedJobs">
         
         <!-- Company Image -->
-        <div class="job-image">
+        <div class="waiting-for-image" *ngIf="jobImagesFetched()">
+          <div class="spinner"></div>
+        </div>
+        
+        <div class="job-image" *ngIf="!jobImagesFetched()">
           <img [src]="job.imageUrl" alt="Job image">
         </div>
 
@@ -86,8 +90,15 @@
         </div>
       </div>
 
+      <!-- loading widget -->
+      <div class="empty-state" *ngIf="jobFetched()">
+        <div class="spinner-container">
+          <div class="spinner"></div> <h3>Loading Opportunities...</h3>
+        </div>
+      </div>
+
       <!-- Empty State -->
-      <div class="empty-state" *ngIf="displayedJobs.length === 0">
+      <div class="empty-state" *ngIf="displayedJobs.length === 0 && !jobFetched()">
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#cbd5e1" viewBox="0 0 24 24">
           <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
         </svg>
