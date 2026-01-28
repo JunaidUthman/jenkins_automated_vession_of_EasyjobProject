@@ -1,7 +1,7 @@
 <!-- home.component.html -->
 <div class="home-container">
   <div class="home-content">
-    
+
     <!-- Page Header -->
     <div class="page-header">
       <h1>Discover Your Next Opportunity</h1>
@@ -10,32 +10,25 @@
 
     <!-- Navigation Tabs -->
     <div class="tabs-container">
-      <button 
-        class="tab-btn" 
-        [class.active]="activeTab === 'trending-jobs'"
-        (click)="setActiveTab('trending-jobs')">
+      <button class="tab-btn" [class.active]="activeTab === 'trending-jobs'" (click)="setActiveTab('trending-jobs')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+          <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
         </svg>
         Trending Jobs
       </button>
-      
-      <button 
-        class="tab-btn" 
-        [class.active]="activeTab === 'trending-internships'"
+
+      <button class="tab-btn" [class.active]="activeTab === 'trending-internships'"
         (click)="setActiveTab('trending-internships')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+          <path
+            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
         </svg>
         Trending Internships
       </button>
-      
-      <button 
-        class="tab-btn" 
-        [class.active]="activeTab === 'saved-jobs'"
-        (click)="setActiveTab('saved-jobs')">
+
+      <button class="tab-btn" [class.active]="activeTab === 'saved-jobs'" (click)="setActiveTab('saved-jobs')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
         </svg>
         Saved Jobs
       </button>
@@ -44,63 +37,80 @@
     <!-- Jobs List -->
     <div class="jobs-list">
       <div class="job-card" *ngFor="let job of displayedJobs">
-        
-        <!-- Company Image -->
-        <div class="waiting-for-image" *ngIf="jobImagesFetched()">
-          <div class="spinner"></div>
+
+        <!-- Header: Logo + Title/Company + Bookmark -->
+        <div class="card-header">
+          <div class="company-logo-container">
+            <img *ngIf="job.logoUrl" [src]="job.logoUrl" alt="Company Logo">
+            <svg *ngIf="!job.logoUrl" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#cbd5e1"
+              viewBox="0 0 24 24">
+              <path
+                d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8V9h8v10zm-2-8h-4v2h4v-2zm0 4h-4v2h4v-2z" />
+            </svg>
+          </div>
+
+          <div class="header-main-info">
+            <h3 class="job-title">{{ job.title }}</h3>
+            <p class="job-company">{{ job.company }}</p>
+          </div>
+
+          <button class="btn-bookmark" (click)="saveJob(job.id)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" viewBox="0 0 24 24">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+            </svg>
+          </button>
         </div>
-        
-        <div class="job-image" *ngIf="!jobImagesFetched()">
-          <img [src]="job.imageUrl" alt="Job image">
+
+        <!-- Location & Time -->
+        <div class="card-location-time">
+          <div class="info-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+              stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            {{ job.location }}
+          </div>
+          <div class="info-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+              stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            {{ job.createdAt ? (job.createdAt | date:'mediumDate') : 'Just Now' }}
+          </div>
         </div>
 
-        <!-- Job Details -->
-        <div class="job-details">
-          <div class="job-header">
-            <div>
-              <h3 class="job-title">{{ job.title }}</h3>
-              <!-- <p class="job-company">{{ job.company }}</p> -->
-            </div>
-            <!-- <span class="job-date">{{ job.date }}</span> -->
-          </div>
+        <!-- Enums Badges -->
+        <div class="card-badges">
+          <span class="badge badge-contract">{{ job.contract_type }}</span>
+          <span class="badge badge-education">{{ job.educationLevel }}</span>
+        </div>
 
-          <div class="job-meta">
-            <span class="job-field">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-              <!-- {{ job.field }} -->
-            </span>
-          </div>
+        <!-- Description Snippet -->
+        <p class="card-description">{{ job.description }}</p>
 
-          <p class="job-description">{{ job.description }}</p>
-
-          <!-- Action Buttons -->
-          <div class="job-actions">
-            <button class="btn-apply" (click)="applyJob(job.id)">
-              Apply Now
-            </button>
-            <button class="btn-save" (click)="saveJob(job.id)" *ngIf="activeTab !== 'saved-jobs'">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
-              </svg>
-              Save
-            </button>
-          </div>
+        <!-- Action Buttons -->
+        <div class="card-actions">
+          <button class="btn-apply-full" (click)="applyJob(job.id)">Apply Now</button>
+          <button class="btn-view-details">View Details</button>
         </div>
       </div>
 
       <!-- loading widget -->
       <div class="empty-state" *ngIf="jobFetched()">
         <div class="spinner-container">
-          <div class="spinner"></div> <h3>Loading Opportunities...</h3>
+          <div class="spinner"></div>
+          <h3>Loading Opportunities...</h3>
         </div>
       </div>
 
       <!-- Empty State -->
       <div class="empty-state" *ngIf="displayedJobs.length === 0 && !jobFetched()">
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#cbd5e1" viewBox="0 0 24 24">
-          <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+          <path
+            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
         </svg>
         <h3>No jobs found</h3>
         <p>Check back later for new opportunities</p>

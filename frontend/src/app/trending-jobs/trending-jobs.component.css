@@ -1,8 +1,8 @@
 /* home.component.css */
 .home-container {
-    margin-top: 70px;
+  margin-top: 70px;
   min-height: 100vh;
-  background-color: #f0f4f2;
+  background-color: #ffffff;
   padding: 2rem 1rem;
 }
 
@@ -65,7 +65,7 @@
 .tab-btn.active {
   background: linear-gradient(135deg, #2fa46d, #25845a);
   border-color: #2fa46d;
-  color: #ffffff;
+  color: #f5f5f5;
   box-shadow: 0 4px 15px rgba(47, 164, 109, 0.3);
 }
 
@@ -79,169 +79,175 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  max-width: 800px;
+  /* Optional: keeps it from getting too wide on large screens */
+  margin: 0 auto;
 }
 
 /* Job Card */
 .job-card {
-  display: flex;
-  gap: 1.5rem;
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(47, 164, 109, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
   transition: all 0.3s ease;
-  animation: fadeInUp 0.5s ease-out backwards;
-  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .job-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(47, 164, 109, 0.15);
-  border-color: #2fa46d;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(47, 164, 109, 0.1);
 }
 
-/* Stagger animation for job cards */
-.job-card:nth-child(1) { animation-delay: 0.1s; }
-.job-card:nth-child(2) { animation-delay: 0.2s; }
-.job-card:nth-child(3) { animation-delay: 0.3s; }
-.job-card:nth-child(4) { animation-delay: 0.4s; }
-.job-card:nth-child(5) { animation-delay: 0.5s; }
+.card-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-/* Job Image */
-.job-image {
-  flex-shrink: 0;
-  width: 120px;
-  height: 120px;
+.company-logo-container {
+  width: 56px;
+  height: 56px;
   border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(47, 164, 109, 0.1), rgba(37, 132, 90, 0.05));
-}
-.waiting-for-image {
-  display:flex;
+  background: #f8fafc;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(135deg, rgba(47, 164, 109, 0.1), rgba(37, 132, 90, 0.05));
+  border: 1px solid #f1f5f9;
 }
 
-.job-image img {
+.company-logo-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
-.job-card:hover .job-image img {
-  transform: scale(1.1);
-}
-
-/* Job Details */
-.job-details {
+.header-main-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.job-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
 }
 
 .job-title {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #1e3d2d;
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.3px;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
 }
 
 .job-company {
-  font-size: 1rem;
-  color: #2fa46d;
-  font-weight: 600;
-  margin: 0;
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 4px 0 0 0;
 }
 
-.job-date {
+.btn-bookmark {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.btn-bookmark:hover {
+  color: #2fa46d;
+}
+
+/* Metadata */
+.card-location-time {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
   font-size: 0.875rem;
   color: #94a3b8;
-  white-space: nowrap;
 }
 
-.job-meta {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.job-field {
+.info-item {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  font-size: 0.9rem;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 0.375rem 0.875rem;
-  border-radius: 6px;
-  font-weight: 500;
+  gap: 4px;
 }
 
-.job-field svg {
-  width: 16px;
-  height: 16px;
-}
-
-.job-description {
-  color: #475569;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* Job Actions */
-.job-actions {
+/* Badges */
+.card-badges {
   display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.btn-apply {
-  padding: 0.75rem 1.75rem;
-  background: linear-gradient(135deg, #2fa46d, #25845a);
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(47, 164, 109, 0.25);
-}
-
-.btn-apply:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(47, 164, 109, 0.35);
-}
-
-.btn-save {
-  padding: 0.75rem 1.25rem;
-  background: #ffffff;
-  color: #64748b;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
   gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-contract {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.badge-education {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+/* Description */
+.card-description {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Actions */
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.btn-apply-full {
+  flex: 3;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #2fa46d, #25845a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-apply-full:hover {
+  opacity: 0.9;
+}
+
+.btn-view-details {
+  flex: 1;
+  padding: 0.875rem;
+  background: white;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-view-details:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .btn-save:hover {
@@ -282,6 +288,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -292,6 +299,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -303,6 +311,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -369,8 +378,8 @@
 }
 
 .spinner {
-  border: 4px solid #f3f3f3; 
-  border-top: 4px solid #2fa46d; 
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2fa46d;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -379,6 +388,11 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

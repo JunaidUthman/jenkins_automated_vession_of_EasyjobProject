@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.backend.enums.ContractType;
+import org.example.backend.enums.EducationLevel;
 import org.example.backend.enums.JobType;
 
 import java.util.HashSet;
@@ -17,7 +19,7 @@ import java.util.Set;
 
 public class Job {
 
-//id of the job
+    // id of the job
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,17 +29,33 @@ public class Job {
     private String location;
     private String image;
     private String company;
+    private String companyLogo; // 🔹 New field for company logo
     private String field;
-    private String function;
-    private String contract_type;
+    private String jobFunction;
+
+    @Enumerated(EnumType.STRING)
+    private ContractType contract_type;
+
     private String experienceMin;
     private String experienceMax;
-    private String educationLevel;
+
+    @Enumerated(EnumType.STRING)
+    private EducationLevel educationLevel;
+
     @Enumerated(EnumType.STRING)
     private JobType type;
 
+    @Column(name = "created_at", nullable = true, updatable = false)
+    private java.time.LocalDateTime createdAt;
 
-    public Job(Long id, String title, String description, String location, String image, JobType type, String company, String field, String function, String contract_type, String experienceMin, String experienceMax, String educationLevel) {
+    @PrePersist
+    protected void onCreate() {
+        createdAt = java.time.LocalDateTime.now();
+    }
+
+    public Job(Long id, String title, String description, String location, String image, JobType type, String company,
+            String companyLogo, String field, String jobFunction, ContractType contract_type, String experienceMin,
+            String experienceMax, EducationLevel educationLevel) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -45,14 +63,14 @@ public class Job {
         this.image = image;
         this.type = type;
         this.company = company;
+        this.companyLogo = companyLogo;
         this.field = field;
-        this.function = function;
+        this.jobFunction = jobFunction;
         this.contract_type = contract_type;
         this.experienceMin = experienceMin;
         this.experienceMax = experienceMax;
         this.educationLevel = educationLevel;
     }
-
 
     // 🔹 Job created by a User (the recruiter)
     @ManyToOne
@@ -63,7 +81,6 @@ public class Job {
     @ManyToMany(mappedBy = "jobs")
     private Set<User> users = new HashSet<>();
 
-
     @Override
     public String toString() {
         return "Job{" +
@@ -71,7 +88,7 @@ public class Job {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", image='" + image + '\'' +
+                ", createdAt=" + createdAt +
                 ", type=" + type +
                 ", creator=" + creator +
                 ", users=" + users +

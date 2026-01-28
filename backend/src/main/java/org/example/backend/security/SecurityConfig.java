@@ -16,13 +16,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.List;
 
 @Configuration
-public class SecurityConfig {// this class(esspecially SecurityFilterChain) intercepts every incoming HTTP request to your backend before it reaches your controllers.
-
+public class SecurityConfig {// this class(esspecially SecurityFilterChain) intercepts every incoming HTTP
+                             // request to your backend before it reaches your controllers.
 
     private final JwtUtil jwtUtil;
     private final CostumeUserService costumeUserService;
 
-    public SecurityConfig(JwtUtil jwtUtil,CostumeUserService costumeUserService) {
+    public SecurityConfig(JwtUtil jwtUtil, CostumeUserService costumeUserService) {
         this.jwtUtil = jwtUtil;
         this.costumeUserService = costumeUserService;
     }
@@ -39,7 +39,7 @@ public class SecurityConfig {// this class(esspecially SecurityFilterChain) inte
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new org.springframework.web.cors.CorsConfiguration();
                     config.setAllowedOrigins(List.of("http://localhost:4200")); // only your frontend
-                    config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setExposedHeaders(List.of("Authorization"));
                     config.setAllowCredentials(true); // now you can send auth headers
@@ -49,16 +49,20 @@ public class SecurityConfig {// this class(esspecially SecurityFilterChain) inte
                         .requestMatchers("/api/auth/**").permitAll() // allow unauthenticated access
                         .requestMatchers("/api/jobs/getAllJobs").permitAll()
                         .requestMatchers("/api/jobs/images/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated() // everything else requires auth
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // JWT filter to check token
-        http.addFilterBefore(new JwtAuthFilter(jwtUtil, costumeUserService), UsernamePasswordAuthenticationFilter.class);//UsernamePasswordAuthenticationFilter is the default filter that processes authentication(login) requests in Spring Security.but its not used in this case because we are using JWTs.
+        http.addFilterBefore(new JwtAuthFilter(jwtUtil, costumeUserService),
+                UsernamePasswordAuthenticationFilter.class);// UsernamePasswordAuthenticationFilter is the default
+                                                            // filter that processes authentication(login) requests in
+                                                            // Spring Security.but its not used in this case because we
+                                                            // are using JWTs.
 
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

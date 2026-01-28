@@ -2,7 +2,6 @@ package org.example.backend.web;
 
 import org.example.backend.DTO.JobDTO;
 import org.example.backend.enums.JobType;
-import org.example.backend.security.AuthRequest;
 import org.example.backend.services.JobService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -24,7 +22,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/jobs")
 
-//TODO :: update routes
+// TODO :: update routes
 public class JobController {
 
     private final JobService jobService;
@@ -35,7 +33,6 @@ public class JobController {
 
     @GetMapping("getAllJobs")
     public ResponseEntity<List<JobDTO>> getAllJobs() {
-
 
         List<JobDTO> jobs = jobService.getAllJobs();
 
@@ -102,33 +99,64 @@ public class JobController {
         return ResponseEntity.ok(response);
     }
 
-
-
-
     @PostMapping("/createJob")
     public ResponseEntity<JobDTO> createJob(
             @RequestParam String title,
             @RequestParam String description,
             @RequestParam String location,
             @RequestParam(required = true) JobType type,
-            @RequestParam(required = false) MultipartFile image,
-            @RequestParam String company,
-            @RequestParam String field,
-            @RequestParam String function,
-            @RequestParam String contract_type,
-            @RequestParam String experienceMin,
-            @RequestParam String experienceMax,
-            @RequestParam String educationLevel
-    ) {
+            @RequestParam(required = false) MultipartFile imageLogo,
+            @RequestParam(required = false) String company,
+            @RequestParam(required = false) String field,
+            @RequestParam(required = false) String function,
+            @RequestParam(required = false) String contract_type,
+            @RequestParam(required = false) String experienceMin,
+            @RequestParam(required = false) String experienceMax,
+            @RequestParam(required = false) String educationLevel) {
         try {
             // Get authenticated user email
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
 
-            JobDTO jobDTO = jobService.createJob(title, description, location, type, image, email, company, field, function, contract_type, experienceMin, experienceMax, educationLevel);
+            JobDTO jobDTO = jobService.createJob(title, description, location, type, imageLogo, email, company,
+                    field, function, contract_type, experienceMin, experienceMax, educationLevel);
 
             // Return saved job with CREATED status
             return ResponseEntity.status(HttpStatus.CREATED).body(jobDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/update/{jobId}")
+    public ResponseEntity<JobDTO> updateJob(
+            @PathVariable Long jobId,
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String location,
+            @RequestParam(required = true) JobType type,
+            @RequestParam(required = false) MultipartFile imageLogo,
+            @RequestParam(required = false) String company,
+            @RequestParam(required = false) String field,
+            @RequestParam(required = false) String function,
+            @RequestParam(required = false) String contract_type,
+            @RequestParam(required = false) String experienceMin,
+            @RequestParam(required = false) String experienceMax,
+            @RequestParam(required = false) String educationLevel) {
+        try {
+            JobDTO jobDTO = jobService.updateJob(jobId, title, description, location, type, imageLogo, company,
+                    field, function, contract_type, experienceMin, experienceMax, educationLevel);
+            return ResponseEntity.ok(jobDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/delete/{jobId}")
+    public ResponseEntity<Map<String, String>> deleteJob(@PathVariable Long jobId) {
+        try {
+            Map<String, String> response = jobService.deleteJob(jobId);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

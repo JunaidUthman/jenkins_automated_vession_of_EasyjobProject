@@ -1,180 +1,107 @@
 <div class="create-job-form-container">
+  <h2>{{ isUpdate ? 'Update Existing Post' : 'Post a New Opportunity' }}</h2>
 
-
-  <h2>Create a New Job</h2>
   <form [formGroup]="jobForm" (ngSubmit)="onSubmit()" class="job-form">
-    <div class="form-group">
-      <label for="title">Job Title</label>
-      <input
-        type="text"
-        id="title"
-        formControlName="title"
-        class="form-control"
-        placeholder="Enter job title"
-      />
-      <div *ngIf="jobForm.get('title')?.invalid && jobForm.get('title')?.touched" class="error-message">
-        Job title is required.
+
+    <!-- Section 1: Basic Information -->
+    <div class="form-section">
+      <h3>Basic Information</h3>
+      <div class="form-grid">
+        <div class="form-group-full">
+          <label for="title">Job Title</label>
+          <input type="text" id="title" formControlName="title" class="form-control"
+            placeholder="e.g. Senior Frontend Developer" />
+        </div>
+
+        <div class="form-group">
+          <label for="type">Position Type</label>
+          <select id="type" formControlName="type" class="form-control">
+            <option value="" disabled>Select type</option>
+            <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contract_type">Contract Type</label>
+          <select id="contract_type" formControlName="contract_type" class="form-control">
+            <option value="" disabled>Select contract</option>
+            <option *ngFor="let contract of contractTypes" [value]="contract">{{ contract }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="jobFunction">Level/Function</label>
+          <input type="text" id="jobFunction" formControlName="jobFunction" class="form-control"
+            placeholder="e.g. Junior, Manager, Lead" />
+        </div>
+
+        <div class="form-group-full">
+          <label for="location">Location</label>
+          <input type="text" id="location" formControlName="location" class="form-control"
+            placeholder="City, Country or Remote" />
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea
-        id="description"
-        formControlName="description"
-        class="form-control"
-        rows="4"
-        placeholder="Enter job description"
-      ></textarea>
-      <div *ngIf="jobForm.get('description')?.invalid && jobForm.get('description')?.touched" class="error-message">
-        Description is required.
+    <!-- Section 2: Requirements -->
+    <div class="form-section">
+      <h3>Exigencies & Requirements</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="educationLevel">Minimum Education</label>
+          <select id="educationLevel" formControlName="educationLevel" class="form-control">
+            <option value="" disabled>Select level</option>
+            <option *ngFor="let level of educationLevels" [value]="level">{{ level }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field">Job Field</label>
+          <input type="text" id="field" formControlName="field" class="form-control"
+            placeholder="e.g. IT, Marketing, Finance" />
+        </div>
+
+        <div class="form-group">
+          <label for="experienceMin">Min Experience (Years)</label>
+          <input type="number" id="experienceMin" formControlName="experienceMin" class="form-control"
+            placeholder="0" />
+        </div>
+
+        <div class="form-group">
+          <label for="experienceMax">Max Experience (Years)</label>
+          <input type="number" id="experienceMax" formControlName="experienceMax" class="form-control"
+            placeholder="5" />
+        </div>
+
+        <div class="form-group form-group-full">
+          <label for="description">Job Description</label>
+          <textarea id="description" formControlName="description" class="form-control textarea-control"
+            placeholder="Describe the role, responsibilities, and requirements in detail..."></textarea>
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="location">Location</label>
-      <input
-        type="text"
-        id="location"
-        formControlName="location"
-        class="form-control"
-        placeholder="Enter job location"
-      />
-      <div *ngIf="jobForm.get('location')?.invalid && jobForm.get('location')?.touched" class="error-message">
-        Location is required.
+    <!-- Section 3: Company Branding -->
+    <div class="form-section">
+      <h3>Company Details</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="company">Company Name</label>
+          <input type="text" id="company" formControlName="company" class="form-control"
+            placeholder="Your organization" />
+        </div>
+
+        <div class="form-group">
+          <label for="logo">Company Logo {{ isUpdate ? '(Optional Update)' : '' }}</label>
+          <input type="file" id="logo" (change)="onLogoSelected($event)" class="form-control" accept="image/*" />
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="type">Job Type</label>
-      <select
-        id="type"
-        formControlName="type"
-        class="form-control"
-      >
-        <option value="">Select job type</option>
-        <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
-      </select>
-      <div *ngIf="jobForm.get('type')?.invalid && jobForm.get('type')?.touched" class="error-message">
-        Job type is required.
-      </div>
+    <div class="submit-container">
+      <button type="submit" class="submit-btn" [disabled]="jobForm.invalid">
+        {{ isUpdate ? 'Save Changes' : 'Publish Opportunity' }}
+      </button>
     </div>
-
-    <div class="form-group">
-      <label for="company">Company</label>
-      <input
-        type="text"
-        id="company"
-        formControlName="company"
-        class="form-control"
-        placeholder="Enter company name"
-      />
-      <div *ngIf="jobForm.get('company')?.invalid && jobForm.get('company')?.touched" class="error-message">
-        Company is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="field">Field</label>
-      <input
-        type="text"
-        id="field"
-        formControlName="field"
-        class="form-control"
-        placeholder="Enter job field"
-      />
-      <div *ngIf="jobForm.get('field')?.invalid && jobForm.get('field')?.touched" class="error-message">
-        Field is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="jobFunction">Function</label>
-      <input
-        type="text"
-        id="jobFunction"
-        formControlName="jobFunction"
-        class="form-control"
-        placeholder="Enter job function"
-      />
-      <div *ngIf="jobForm.get('jobFunction')?.invalid && jobForm.get('jobFunction')?.touched" class="error-message">
-        Function is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="contract_type">Contract Type</label>
-      <input
-        type="text"
-        id="contract_type"
-        formControlName="contract_type"
-        class="form-control"
-        placeholder="Enter contract type"
-      />
-      <div *ngIf="jobForm.get('contract_type')?.invalid && jobForm.get('contract_type')?.touched" class="error-message">
-        Contract type is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="experienceMin">Minimum Experience</label>
-      <input
-        type="text"
-        id="experienceMin"
-        formControlName="experienceMin"
-        class="form-control"
-        placeholder="Enter minimum experience"
-      />
-      <div *ngIf="jobForm.get('experienceMin')?.invalid && jobForm.get('experienceMin')?.touched" class="error-message">
-        Minimum experience is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="experienceMax">Maximum Experience</label>
-      <input
-        type="text"
-        id="experienceMax"
-        formControlName="experienceMax"
-        class="form-control"
-        placeholder="Enter maximum experience"
-      />
-      <div *ngIf="jobForm.get('experienceMax')?.invalid && jobForm.get('experienceMax')?.touched" class="error-message">
-        Maximum experience is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="educationLevel">Education Level</label>
-      <input
-        type="text"
-        id="educationLevel"
-        formControlName="educationLevel"
-        class="form-control"
-        placeholder="Enter education level"
-      />
-      <div *ngIf="jobForm.get('educationLevel')?.invalid && jobForm.get('educationLevel')?.touched" class="error-message">
-        Education level is required.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="image">Job Image (Optional)</label>
-      <input
-        type="file"
-        id="image"
-        (change)="onFileSelected($event)"
-        class="form-control"
-        accept="image/*"
-      />
-    </div>
-
-    <button
-      type="submit"
-      [disabled]="jobForm.invalid"
-      class="btn btn-primary submit-btn"
-    >
-      Create Job
-    </button>
   </form>
 </div>

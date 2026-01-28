@@ -1,9 +1,10 @@
 package org.example.backend.JobService;
 
-
 import org.example.backend.DTO.JobDTO;
 import org.example.backend.entities.Job;
 import org.example.backend.entities.User;
+import org.example.backend.enums.ContractType;
+import org.example.backend.enums.EducationLevel;
 import org.example.backend.enums.JobType;
 import org.example.backend.repositories.JobRepo;
 import org.example.backend.repositories.UserRepo;
@@ -28,29 +29,27 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class) // Enables Mockito in JUnit 5
 public class JobServiceTest {
 
-    @Mock // we used this to simulate the behaviour of jobRepo , because we dont wanna touch the database for reel, we just wanna test
+    @Mock // we used this to simulate the behaviour of jobRepo , because we dont wanna
+          // touch the database for reel, we just wanna test
     private JobRepo jobRepo;
 
     @Mock
     private UserRepo userRepo;
 
-    @InjectMocks // this is the class underTest, when we use @InjectMocks, springboot inject the serices we mocked automaticly in here
+    @InjectMocks // this is the class underTest, when we use @InjectMocks, springboot inject the
+                 // serices we mocked automaticly in here
     private JobService jobService;
-
-    private Long id;
-    private String title;
-    private String description;
-    private String location;
-    private String image;
-    private String type;
 
     @Test
     public void shouldReturnAllJobsAsDTOs() {
         // 1️⃣ Arrange - define fake data
-        Job job1 = new Job(1L, "Java Developer", "Backend job","test","test", JobType.INTERNSHIP, null, null, null, null, null, null, null);
-        Job job2 = new Job(1L, "test", "Backend job","test","test",JobType.INTERNSHIP, null, null, null, null, null, null, null);
+        Job job1 = new Job(1L, "Java Developer", "Backend job", "test", "test", JobType.INTERNSHIP, "Company",
+                "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
+        Job job2 = new Job(1L, "test", "Backend job", "test", "test", JobType.INTERNSHIP, "Company", "logo.jpg", "IT",
+                "test", ContractType.CDD, "0", "1", EducationLevel.BAC);
 
-        when(jobRepo.findAll()).thenReturn(List.of(job1, job2));// simulate what shoul happen when teh service calls the jobRepo
+        when(jobRepo.findAll()).thenReturn(List.of(job1, job2));// simulate what shoul happen when teh service calls the
+                                                                // jobRepo
 
         // Act - call the method we want to test
         List<JobDTO> result = jobService.getAllJobs();
@@ -62,22 +61,23 @@ public class JobServiceTest {
     }
 
     @Test
-    public void getJobsByUserEmailShouldReturnJobs(){
-        Job job1 = new Job(1L, "Java Developer", "Backend job","test","test", JobType.INTERNSHIP, null, null, null, null, null, null, null);
-        Job job2 = new Job(1L, "test", "Backend job","test","test",JobType.INTERNSHIP, null, null, null, null, null, null, null);
+    public void getJobsByUserEmailShouldReturnJobs() {
+        Job job1 = new Job(1L, "Java Developer", "Backend job", "test", "test", JobType.INTERNSHIP, "Company",
+                "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
+        Job job2 = new Job(1L, "test", "Backend job", "test", "test", JobType.INTERNSHIP, "Company", "logo.jpg", "IT",
+                "test", ContractType.CDD, "0", "1", EducationLevel.BAC);
 
         User user = new User();
 
         user.setEmail("test@test");
-        user.getCreatedJobs().addAll(List.of(job1,job2));
+        user.getCreatedJobs().addAll(List.of(job1, job2));
 
         when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
-        List<JobDTO> jobs =  jobService.getJobsByUserEmail(user.getEmail());
+        List<JobDTO> jobs = jobService.getJobsByUserEmail(user.getEmail());
 
         assertThat(jobs).hasSize(2);
         assertThat(jobs.get(0).getTitle()).isEqualTo("Java Developer");
-
 
     }
 
@@ -98,7 +98,8 @@ public class JobServiceTest {
         // Arrange
         User user = new User();
         user.setEmail("test@test");
-        Job job = new Job(1L, "Java Developer", "Backend job", "test", "test", JobType.INTERNSHIP, null, null, null, null, null, null, null);
+        Job job = new Job(1L, "Java Developer", "Backend job", "test", "test", JobType.INTERNSHIP, "Company",
+                "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
 
         when(userRepo.findByEmail("test@test")).thenReturn(Optional.of(user));
         when(jobRepo.findById(1L)).thenReturn(Optional.of(job));
@@ -139,8 +140,10 @@ public class JobServiceTest {
 
     @Test
     void getApplicationsShouldReturnJobs() {
-        Job job1 = new Job(1L, "Python Developer", "Backend job", "test", "test", JobType.INTERNSHIP, null, null, null, null, null, null, null);
-        Job job2 = new Job(2L, "Python Developer", "Backend job", "test", "test", JobType.INTERNSHIP, null, null, null, null, null, null, null);
+        Job job1 = new Job(1L, "Python Developer", "Backend job", "test", "test", JobType.INTERNSHIP, "Company",
+                "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
+        Job job2 = new Job(2L, "Python Developer", "Backend job", "test", "test", JobType.INTERNSHIP, "Company",
+                "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_3);
 
         User user = new User();
         user.setEmail("test@test");
@@ -169,7 +172,8 @@ public class JobServiceTest {
         // Arrange
         User user = new User();
         user.setEmail("test@test");
-        Job job = new Job(1L, "Java Developer", "Backend job", "test", "test", JobType.INTERNSHIP, null, null, null, null, null, null, null);
+        Job job = new Job(1L, "Java Developer", "Backend job", "test", "test", JobType.INTERNSHIP, "CompanyA",
+                "logoA.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
         user.getJobs().add(job);
 
         when(userRepo.findByEmail("test@test")).thenReturn(Optional.of(user));
@@ -212,16 +216,22 @@ public class JobServiceTest {
         User creator = new User();
         creator.setEmail("creator@test");
 
-        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test image content".getBytes());
+        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "image/jpeg",
+                "test image content".getBytes());
 
-        Job savedJob = new Job(1L, "Java Developer", "Backend job", "test", "123456789_test.jpg", JobType.INTERNSHIP, null, null, null, null, null, null, null);
+        Job savedJob = new Job(1L, "Java Developer", "Backend job", "test", "123456789_test.jpg", JobType.INTERNSHIP,
+                "Company", "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
         savedJob.setCreator(creator);
 
         when(userRepo.findByEmail("creator@test")).thenReturn(Optional.of(creator));
-        when(jobRepo.save(any(Job.class))).thenReturn(savedJob); // we add any(Job.class)) cause savedJob is not necesserly the same thing that is gonne get returned, an id might get added up so we pass a job class but without specifing what gonna be in it
+        when(jobRepo.save(any(Job.class))).thenReturn(savedJob); // we add any(Job.class)) cause savedJob is not
+                                                                 // necesserly the same thing that is gonne get
+                                                                 // returned, an id might get added up so we pass a job
+                                                                 // class but without specifing what gonna be in it
 
         // Act
-        JobDTO result = jobService.createJob("Java Developer", "Backend job", "test", JobType.INTERNSHIP, image, "creator@test", "Test Company", "IT", "Developer", "Full-time", "1", "5", "Bachelor");
+        JobDTO result = jobService.createJob("Java Developer", "Backend job", "test", JobType.INTERNSHIP, image,
+                "creator@test", "Test Company", "IT", "Developer", "CDI", "1", "5", "BAC_PLUS_5");
 
         // Assert
         assertThat(result.getTitle()).isEqualTo("Java Developer");
@@ -231,11 +241,13 @@ public class JobServiceTest {
 
     @Test
     void createJobShouldThrowExceptionIfUserNotFound() {
-        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "image/jpeg", "test image content".getBytes());
+        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "image/jpeg",
+                "test image content".getBytes());
 
         when(userRepo.findByEmail("unknown@test")).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> jobService.createJob("Java Developer", "Backend job", "test", JobType.INTERNSHIP, image, "unknown@test", "Test Company", "IT", "Developer", "Full-time", "1", "5", "Bachelor"))
+        assertThatThrownBy(() -> jobService.createJob("Java Developer", "Backend job", "test", JobType.INTERNSHIP,
+                image, "unknown@test", "Test Company", "IT", "Developer", "CDI", "1", "5", "BAC_PLUS_5"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("User not found");
     }
@@ -246,14 +258,16 @@ public class JobServiceTest {
         User creator = new User();
         creator.setEmail("creator@test");
 
-        Job savedJob = new Job(1L, "Java Developer", "Backend job", "test", null, JobType.INTERNSHIP, null, null, null, null, null, null, null);
+        Job savedJob = new Job(1L, "Java Developer", "Backend job", "test", null, JobType.INTERNSHIP, "Company",
+                "logo.jpg", "IT", "Developer", ContractType.CDI, "1", "3", EducationLevel.BAC_PLUS_5);
         savedJob.setCreator(creator);
 
         when(userRepo.findByEmail("creator@test")).thenReturn(Optional.of(creator));
         when(jobRepo.save(any(Job.class))).thenReturn(savedJob);
 
         // Act
-        JobDTO result = jobService.createJob("Java Developer", "Backend job", "test", JobType.INTERNSHIP, null, "creator@test", "Test Company", "IT", "Developer", "Full-time", "1", "5", "Bachelor");
+        JobDTO result = jobService.createJob("Java Developer", "Backend job", "test", JobType.INTERNSHIP, null,
+                "creator@test", "Test Company", "IT", "Developer", "CDI", "1", "5", "BAC_PLUS_5");
 
         // Assert
         assertThat(result.getTitle()).isEqualTo("Java Developer");

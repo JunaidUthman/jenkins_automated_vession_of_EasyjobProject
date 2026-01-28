@@ -1,7 +1,7 @@
 /* home.component.css */
 .home-container {
   min-height: 100vh;
-  background-color: #f0f4f2;
+  background-color: #f5f5f5;
   padding: 2rem 1rem;
 }
 
@@ -38,12 +38,13 @@
   animation: slideUp 0.6s ease-out 0.2s backwards;
 }
 
-.action-container{
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
+.action-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.tab-btn  {
+
+.tab-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -58,9 +59,10 @@
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-.btn-post-job{
 
-    display: flex;
+.btn-post-job {
+
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 1.5rem;
@@ -70,7 +72,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-background: linear-gradient(135deg, #2fa46d, #25845a);
+  background: linear-gradient(135deg, #2fa46d, #25845a);
   border-color: #2fa46d;
   color: #ffffff;
   box-shadow: 0 4px 15px rgba(47, 164, 109, 0.3);
@@ -102,69 +104,68 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 /* Job Card */
 .job-card {
-  display: flex;
-  gap: 1.5rem;
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(47, 164, 109, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
   transition: all 0.3s ease;
-  animation: fadeInUp 0.5s ease-out backwards;
-  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .job-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(47, 164, 109, 0.15);
-  border-color: #2fa46d;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(47, 164, 109, 0.1);
 }
 
-/* Stagger animation for job cards */
-.job-card:nth-child(1) { animation-delay: 0.1s; }
-.job-card:nth-child(2) { animation-delay: 0.2s; }
-.job-card:nth-child(3) { animation-delay: 0.3s; }
-.job-card:nth-child(4) { animation-delay: 0.4s; }
-.job-card:nth-child(5) { animation-delay: 0.5s; }
+.card-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-/* Job Image */
-.job-image {
-  flex-shrink: 0;
-  width: 120px;
-  height: 120px;
+.company-logo-container {
+  width: 56px;
+  height: 56px;
   border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(47, 164, 109, 0.1), rgba(37, 132, 90, 0.05));
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f1f5f9;
 }
 
-.job-image img {
+.company-logo-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
-.job-card:hover .job-image img {
-  transform: scale(1.1);
-}
-
-/* Job Details */
-.job-details {
+.header-main-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
 }
 
-.job-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  position: relative;
+.job-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.job-company {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 4px 0 0 0;
 }
 
 .menu-container {
@@ -174,14 +175,9 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
 .menu-btn {
   background: none;
   border: none;
+  color: #94a3b8;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.menu-btn:hover {
-  background-color: #f1f5f9;
+  padding: 4px;
 }
 
 .dropdown-menu {
@@ -193,83 +189,117 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  min-width: 140px;
+  min-width: 120px;
 }
 
 .dropdown-item {
   display: block;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 8px 16px;
+  text-align: left;
   background: none;
   border: none;
-  text-align: left;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: #475569;
-  transition: background-color 0.3s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #f1f5f9;
+  background: #f8fafc;
   color: #2fa46d;
 }
 
-.job-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #1e3d2d;
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.3px;
-}
-
-.job-company {
-  font-size: 1rem;
-  color: #2fa46d;
-  font-weight: 600;
-  margin: 0;
-}
-
-.job-date {
-  font-size: 0.875rem;
-  color: #94a3b8;
-  white-space: nowrap;
-}
-
-.job-meta {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.job-field {
+/* Metadata */
+.card-location-time {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  font-size: 0.9rem;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 0.375rem 0.875rem;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.job-field svg {
-  width: 16px;
-  height: 16px;
-}
-
-.job-description {
-  color: #475569;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* Job Actions */
-.job-actions {
-  display: flex;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Badges */
+.card-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-contract {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.badge-education {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+/* Description */
+.card-description {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Actions */
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.btn-apply-full {
+  flex: 3;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #2fa46d, #25845a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-apply-full:hover {
+  opacity: 0.9;
+}
+
+.btn-view-details {
+  flex: 1;
+  padding: 0.875rem;
+  background: white;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-view-details:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .btn-apply {
@@ -343,6 +373,7 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -353,6 +384,7 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -364,32 +396,34 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-content {
+  position: relative;
   background: #ffffff;
   border-radius: 16px;
-  padding: 2rem;
-  max-width: 500px;
+  padding: 3rem 2rem 2rem;
+  max-width: 800px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
@@ -397,14 +431,137 @@ background: linear-gradient(135deg, #2fa46d, #25845a);
   animation: slideUp 0.3s ease-out;
 
   /* 🧩 Hide scrollbar but keep scrolling */
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* Internet Explorer and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .modal-content::-webkit-scrollbar {
-  display: none;               /* Chrome, Safari, Opera */
+  display: none;
 }
 
+.delete-modal-content {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+  transform: rotate(90deg);
+}
+
+.delete-icon {
+  width: 80px;
+  height: 80px;
+  background: #fef2f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.delete-modal-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.75rem;
+}
+
+.delete-modal-content p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.delete-actions button {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: none;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.btn-delete-confirm {
+  background: #ef4444;
+  color: white;
+  border: none;
+}
+
+.btn-delete-confirm:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2fa46d;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

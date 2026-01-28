@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { HeroComponent } from './hero/hero.component';
 import { InfoComponent } from './info/info.component';
-import {FooterComponent} from './footer/footer.component';
-import {LandingPageComponent} from "./landing-page/landing-page.component";
+import { FooterComponent } from './footer/footer.component';
+import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -12,7 +12,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ CommonModule , HeaderComponent, HeroComponent, InfoComponent, FooterComponent , LandingPageComponent , RouterOutlet],
+  imports: [CommonModule, HeaderComponent, HeroComponent, InfoComponent, FooterComponent, LandingPageComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
       const role = localStorage.getItem('Roles');
       this.isRecrutter = role === 'Recrutter';
 
-      
-      if (this.isRecrutter && !url.startsWith('/dashboard')) {
+
+      if (this.isRecrutter && (url === '/' || url === '' || url === '/home')) {
         this.router.navigate(['/dashboard/home']);
       }
     });
@@ -40,9 +40,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const role = localStorage.getItem('Roles');
     this.isRecrutter = role === 'Recrutter';
-    if (this.isRecrutter && !this.router.url.startsWith('/dashboard')) {
-      this.router.navigate(['/dashboard/home']);
-    }
   }
 }
 

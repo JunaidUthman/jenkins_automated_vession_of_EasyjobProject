@@ -9,35 +9,51 @@ public class JobDTO {
     private String title;
     private String description;
     private String location;
-    private String image;
     private String type;
     private String company;
+    private String companyLogo;
+    private String image;
     private String field;
     private String function;
     private String contract_type;
     private String experienceMin;
     private String experienceMax;
     private String educationLevel;
+    private String createdAt;
 
     public JobDTO(Job job) {
         this.id = job.getId();
         this.title = job.getTitle();
         this.description = job.getDescription();
         this.location = job.getLocation();
-//        if (job.getImage() != null && !job.getImage().isEmpty()) {
-//            this.image = "http://localhost:8080/jobs/image/" + job.getImage();
-//        } else {
-//            this.image = null; // or some placeholder URL
-//        }
-        this.type = job.getType().toString();
-        this.image= job.getImage();
+        // if (job.getImage() != null && !job.getImage().isEmpty()) {
+        // this.image = "http://localhost:8080/jobs/image/" + job.getImage();
+        // } else {
+        // this.image = null; // or some placeholder URL
+        // }
+        this.type = job.getType() != null ? job.getType().toString() : null;
+        this.image = job.getImage();
         this.company = job.getCompany();
+        this.companyLogo = job.getCompanyLogo();
         this.field = job.getField();
-        this.function = job.getFunction();
-        this.contract_type = job.getContract_type();
+        this.function = job.getJobFunction();
+        this.contract_type = job.getContract_type() != null ? job.getContract_type().toString() : null;
         this.experienceMin = job.getExperienceMin();
         this.experienceMax = job.getExperienceMax();
-        this.educationLevel = job.getEducationLevel();
+        this.educationLevel = job.getEducationLevel() != null ? job.getEducationLevel().toString() : null;
+        try {
+            this.createdAt = job.getCreatedAt() != null ? job.getCreatedAt().toString() : null;
+        } catch (Exception e) {
+            this.createdAt = null;
+        }
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -94,6 +110,14 @@ public class JobDTO {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
     }
 
     public String getField() {
