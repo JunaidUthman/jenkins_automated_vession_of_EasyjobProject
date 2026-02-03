@@ -51,10 +51,15 @@ public class JobService {
                 Job job = jobRepository.findById(jobId)
                                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
+                // Check if user has already applied
+                if (userRepository.hasAppliedToJob(user.getId(), jobId)) {
+                        return Map.of("message", "You have already applied to this job", "alreadyApplied", "true");
+                }
+
                 user.getJobs().add(job);
                 userRepository.save(user);
 
-                return Map.of("message", "Job applied");
+                return Map.of("message", "Application submitted successfully", "success", "true");
         }
 
         public List<JobDTO> getApplications(String email) {

@@ -1,9 +1,8 @@
 <div class="profile-page">
     <!-- Profile Header Banner -->
     <div class="profile-header-new">
-        <div class="banner"></div>
         <div class="user-info-section">
-            <div class="">
+            <div class="avatar-container">
                 <img [src]="getProfileImageUrl()" class="profile-avatar">
 
                 <!-- Upload Spinner Overlay -->
@@ -18,7 +17,6 @@
             </div>
             <div class="user-text">
                 <h1>{{ profile.username || 'User' }}</h1>
-                <p class="subtitle">{{ profile.currentJobTitle || 'Professional Title' }}</p>
             </div>
         </div>
     </div>

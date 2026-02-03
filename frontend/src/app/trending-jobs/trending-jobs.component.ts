@@ -45,6 +45,7 @@ export class TrendingJobsComponent implements OnInit {
   savedJobs: Job[] = [];
   jobFetched = signal(true);
   jobImagesFetched = signal(true);
+  applyingJobId: number | null = null;
 
   ngOnInit(): void {
     this.jobService.getAllJobs().subscribe({
@@ -86,6 +87,15 @@ export class TrendingJobsComponent implements OnInit {
 
 
     });
+
+    // Load saved jobs from localStorage
+    this.loadSavedJobs();
+  }
+
+  private loadSavedJobs(): void {
+    const savedJobIds = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const allJobs = [...this.jobs, ...this.internships];
+    this.savedJobs = allJobs.filter(job => savedJobIds.includes(job.id));
   }
 
   private mapToJob(jobResponse: JobResponse): Job {
@@ -121,10 +131,34 @@ export class TrendingJobsComponent implements OnInit {
   saveJob(jobId: number) {
     if (localStorage.getItem('Token') === null) {
       this.toastr.info('Please login to save jobs', 'Info');
+      return;
     }
-    else {
-      this.toastr.info('this service is not active right now', 'Info');
+
+    const savedJobIds: number[] = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const index = savedJobIds.indexOf(jobId);
+
+    if (index > -1) {
+      // Job is already saved, remove it
+      savedJobIds.splice(index, 1);
+      this.savedJobs = this.savedJobs.filter(job => job.id !== jobId);
+      this.toastr.info('Job removed from saved', 'Removed');
+    } else {
+      // Job is not saved, add it
+      savedJobIds.push(jobId);
+      const allJobs = [...this.jobs, ...this.internships];
+      const jobToSave = allJobs.find(job => job.id === jobId);
+      if (jobToSave && !this.savedJobs.find(job => job.id === jobId)) {
+        this.savedJobs.push(jobToSave);
+      }
+      this.toastr.success('Job saved successfully', 'Saved');
     }
+
+    localStorage.setItem('savedJobs', JSON.stringify(savedJobIds));
+  }
+
+  isJobSaved(jobId: number): boolean {
+    const savedJobIds: number[] = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    return savedJobIds.includes(jobId);
   }
 
   applyJob(jobId: number) {
@@ -132,17 +166,32 @@ export class TrendingJobsComponent implements OnInit {
       this.toastr.info('Please login to apply for jobs', 'Info');
     }
     else {
+      this.applyingJobId = jobId;
       this.jobService.applyJob(jobId).subscribe({
         next: (res) => {
-          console.log('Applied Successfully', res);
-          this.showSuccess();
+          console.log('Application response:', res);
+          this.applyingJobId = null;
+
+          // Check if already applied
+          if (res.alreadyApplied === 'true') {
+            this.toastr.warning(res.message, 'Already Applied');
+          }
+          // Check if successful
+          else if (res.success === 'true') {
+            this.toastr.success(res.message, 'Success');
+          }
+          // Fallback for any other response
+          else {
+            this.toastr.info(res.message, 'Info');
+          }
         },
         error: (err) => {
           console.log('Error applying for job', err);
+          this.applyingJobId = null;
+          this.toastr.error('Failed to apply for job. Please try again.', 'Error');
         }
       });
     }
-
   }
 
   showSuccess() {
