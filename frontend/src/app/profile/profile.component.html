@@ -1,0 +1,227 @@
+<div class="profile-page">
+    <!-- Profile Header Banner -->
+    <div class="profile-header-new">
+        <div class="banner"></div>
+        <div class="user-info-section">
+            <div class="">
+                <img [src]="getProfileImageUrl()" class="profile-avatar">
+
+                <!-- Upload Spinner Overlay -->
+                <div class="upload-overlay" *ngIf="isUploading">
+                    <div class="avatar-spinner"></div>
+                </div>
+
+                <label for="fileInput" class="camera-btn" *ngIf="!isUploading">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden>
+                </label>
+            </div>
+            <div class="user-text">
+                <h1>{{ profile.username || 'User' }}</h1>
+                <p class="subtitle">{{ profile.currentJobTitle || 'Professional Title' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-nav-container">
+        <div class="tabs-nav">
+            <button [class.active]="activeTab === 'personal'" (click)="setTab('personal')">Personal</button>
+            <button [class.active]="activeTab === 'professional'" (click)="setTab('professional')">Professional</button>
+            <button [class.active]="activeTab === 'languages'" (click)="setTab('languages')">Languages</button>
+            <button [class.active]="activeTab === 'preferences'" (click)="setTab('preferences')">Preferences</button>
+            <button [class.active]="activeTab === 'links'" (click)="setTab('links')">Links & Files</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="profile-content-container" *ngIf="!isLoading; else loading">
+        <form (ngSubmit)="onSubmit()" #profileForm="ngForm">
+
+            <!-- Personal Information Tab -->
+            <div class="tab-content" *ngIf="activeTab === 'personal'">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h2>Personal Information</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="username" [(ngModel)]="profile.username" placeholder="johndoe">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" [(ngModel)]="profile.email" readonly
+                                class="readonly-field">
+                        </div>
+                        <div class="form-group icon-input">
+                            <label>Phone Number</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-phone-alt"></i>
+                                <input type="tel" name="phone" [(ngModel)]="profile.phone"
+                                    placeholder="+212 600 000 000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" name="dateOfBirth" [(ngModel)]="profile.dateOfBirth">
+                        </div>
+                        <div class="form-group icon-input">
+                            <label>City</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <input type="text" name="city" [(ngModel)]="profile.city" placeholder="Casablanca">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" name="country" [(ngModel)]="profile.country" placeholder="Morocco">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Tab -->
+            <div class="tab-content" *ngIf="activeTab === 'professional'">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-briefcase"></i>
+                        <h2>Professional Details</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Current Job Title</label>
+                            <input type="text" name="currentJobTitle" [(ngModel)]="profile.currentJobTitle"
+                                placeholder="Senior Frontend Developer">
+                        </div>
+                        <div class="form-group">
+                            <label>Years of Experience</label>
+                            <input type="number" name="yearsOfExperience" [(ngModel)]="profile.yearsOfExperience">
+                        </div>
+                        <div class="form-group">
+                            <label>Highest Education</label>
+                            <select name="educationLevel" [(ngModel)]="profile.educationLevel">
+                                <option value="BACCALAUREATE">Baccalaureate</option>
+                                <option value="BACHELOR">Bachelor's Degree</option>
+                                <option value="MASTER">Master's Degree</option>
+                                <option value="PHD">PhD</option>
+                                <option value="DIPLOMA">Diploma</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Skills (Comma separated)</label>
+                        <textarea name="skills" [(ngModel)]="profile.skills"
+                            placeholder="Java, Angular, Spring Boot..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Languages Tab -->
+            <div class="tab-content" *ngIf="activeTab === 'languages'">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-language"></i>
+                        <h2>Language Proficiency</h2>
+                    </div>
+                    <div class="form-grid-3">
+                        <div class="form-group scale-group">
+                            <label>Arabic <span>{{profile.arabicPercent}}%</span></label>
+                            <input type="range" name="arabicPercent" [(ngModel)]="profile.arabicPercent" min="0"
+                                max="100">
+                        </div>
+                        <div class="form-group scale-group">
+                            <label>French <span>{{profile.frenchPercent}}%</span></label>
+                            <input type="range" name="frenchPercent" [(ngModel)]="profile.frenchPercent" min="0"
+                                max="100">
+                        </div>
+                        <div class="form-group scale-group">
+                            <label>English <span>{{profile.englishPercent}}%</span></label>
+                            <input type="range" name="englishPercent" [(ngModel)]="profile.englishPercent" min="0"
+                                max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences Tab -->
+            <div class="tab-content" *ngIf="activeTab === 'preferences'">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cog"></i>
+                        <h2>Job Preferences</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Preferred Contract Type</label>
+                            <select name="preferredContract" [(ngModel)]="profile.preferredContract">
+                                <option value="CDI">CDI (Permanent)</option>
+                                <option value="CDD">CDD (Fixed-term)</option>
+                                <option value="FREELANCE">Freelance</option>
+                                <option value="INTERNSHIP">Internship</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Location</label>
+                            <input type="text" name="preferredLocation" [(ngModel)]="profile.preferredLocation"
+                                placeholder="e.g. Casablanca">
+                        </div>
+                    </div>
+                    <div class="toggle-card">
+                        <div class="toggle-text">
+                            <h3>Open to Remote Work</h3>
+                            <p>Are you willing to work remotely?</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" name="openToRemote" [(ngModel)]="profile.openToRemote">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links Tab -->
+            <div class="tab-content" *ngIf="activeTab === 'links'">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-file-alt"></i>
+                        <h2>Links & Files</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>LinkedIn URL</label>
+                            <input type="url" name="linkedinUrl" [(ngModel)]="profile.linkedinUrl"
+                                placeholder="https://linkedin.com/in/username">
+                        </div>
+                        <div class="form-group">
+                            <label>Portfolio URL</label>
+                            <input type="url" name="portfolioUrl" [(ngModel)]="profile.portfolioUrl"
+                                placeholder="https://yourportfolio.com">
+                        </div>
+                        <div class="form-group">
+                            <label>CV Link (URL)</label>
+                            <input type="url" name="cvUrl" [(ngModel)]="profile.cvUrl" placeholder="Link to your CV">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Save Button -->
+            <div class="action-footer">
+                <button type="submit" class="save-changes-btn">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <ng-template #loading>
+        <div class="profile-loader">
+            <div class="spinner"></div>
+            <p>Updating your profile view...</p>
+        </div>
+    </ng-template>
+</div>

@@ -22,7 +22,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   token?: string;
   msg?: string;
-  roles?: string;
+  roles?: string[];
   username?: string;
   ExpirationTime?: number;
 }
@@ -39,7 +39,7 @@ export class AuthServiceService {
   private signupUrl = 'http://localhost:8080/api/auth/signup';
   private loginUrl = 'http://localhost:8080/api/auth/login';
 
-  constructor(private http: HttpClient,private router:Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   signup(data: SignupRequest): Observable<SignupResponse> {
     return this.http.post<SignupResponse>(this.signupUrl, data);

@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule , FormsModule , RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -20,7 +20,7 @@ export class LoginComponent {
   passwordError = false;
   UserExists = false;
 
-  constructor(private router: Router ,private authService: AuthServiceService,private toastr: ToastrService) {}
+  constructor(private router: Router, private authService: AuthServiceService, private toastr: ToastrService) { }
 
   onSubmit() {
     // Reset error flags
@@ -46,13 +46,18 @@ export class LoginComponent {
       next: (res) => {
         if (res.token) {
           localStorage.setItem('Token', res.token);
-          localStorage.setItem('Roles', res.roles ?? '');
+          const roles = (res.roles ?? []).join(',');
+          localStorage.setItem('Roles', roles);
           localStorage.setItem('UserName', res.username ?? '');
           localStorage.setItem('ExpirationTime', (res.ExpirationTime ?? 0).toString());
           this.showSuccess();
-          setTimeout(()=>{
-            this.router.navigate(['/jobs']);
-          },1500);
+          setTimeout(() => {
+            if (roles.includes('Recrutter')) {
+              this.router.navigate(['/dashboard/home']);
+            } else {
+              this.router.navigate(['/jobs']);
+            }
+          }, 1500);
 
           const expiresIn = res.ExpirationTime ?? 0;
           this.authService.startLogoutTimer(expiresIn);

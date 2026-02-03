@@ -38,64 +38,71 @@
     <div class="jobs-list">
       <div class="job-card" *ngFor="let job of displayedJobs">
 
-        <!-- Header: Logo + Title/Company + Bookmark -->
-        <div class="card-header">
-          <div class="company-logo-container">
+        <!-- Left: Company Logo (20%) -->
+        <div class="job-card-logo">
+          <div class="logo-wrapper">
             <img *ngIf="job.logoUrl" [src]="job.logoUrl" alt="Company Logo">
-            <svg *ngIf="!job.logoUrl" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#cbd5e1"
+            <svg *ngIf="!job.logoUrl" xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#cbd5e1"
               viewBox="0 0 24 24">
               <path
                 d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8V9h8v10zm-2-8h-4v2h4v-2zm0 4h-4v2h4v-2z" />
             </svg>
           </div>
+        </div>
 
-          <div class="header-main-info">
-            <h3 class="job-title">{{ job.title }}</h3>
-            <p class="job-company">{{ job.company }}</p>
+        <!-- Right: Job Information (80%) -->
+        <div class="job-card-content">
+
+          <!-- Header: Title/Company + Bookmark -->
+          <div class="content-header">
+            <div class="title-section">
+              <h3 class="job-title">{{ job.title }}</h3>
+              <p class="job-company">{{ job.company }}</p>
+            </div>
+            <button class="btn-bookmark" (click)="saveJob(job.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+              </svg>
+            </button>
           </div>
 
-          <button class="btn-bookmark" (click)="saveJob(job.id)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-              stroke-width="2" viewBox="0 0 24 24">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-            </svg>
-          </button>
-        </div>
-
-        <!-- Location & Time -->
-        <div class="card-location-time">
-          <div class="info-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
-              stroke-width="2" viewBox="0 0 24 24">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            {{ job.location }}
+          <!-- Location & Time -->
+          <div class="card-metadata">
+            <div class="info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              {{ job.location }}
+            </div>
+            <div class="info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              {{ job.createdAt ? (job.createdAt | date:'mediumDate') : 'Just Now' }}
+            </div>
           </div>
-          <div class="info-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
-              stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-            </svg>
-            {{ job.createdAt ? (job.createdAt | date:'mediumDate') : 'Just Now' }}
+
+          <!-- Badges -->
+          <div class="card-badges">
+            <span class="badge badge-contract">{{ job.contract_type }}</span>
+            <span class="badge badge-education">{{ job.educationLevel }}</span>
+          </div>
+
+          <!-- Description -->
+          <p class="card-description">{{ job.description }}</p>
+
+          <!-- Action Buttons -->
+          <div class="card-actions">
+            <button class="btn-apply-full" (click)="applyJob(job.id)">Apply Now</button>
+            <button class="btn-view-details">View Details</button>
           </div>
         </div>
 
-        <!-- Enums Badges -->
-        <div class="card-badges">
-          <span class="badge badge-contract">{{ job.contract_type }}</span>
-          <span class="badge badge-education">{{ job.educationLevel }}</span>
-        </div>
-
-        <!-- Description Snippet -->
-        <p class="card-description">{{ job.description }}</p>
-
-        <!-- Action Buttons -->
-        <div class="card-actions">
-          <button class="btn-apply-full" (click)="applyJob(job.id)">Apply Now</button>
-          <button class="btn-view-details">View Details</button>
-        </div>
       </div>
 
       <!-- loading widget -->
