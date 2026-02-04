@@ -1,0 +1,45 @@
+# the explenation of this docker-compose file exist on docker-composeExplenation
+version: '3.8'
+
+services:
+  # 1. The Database Service
+  mysql-db:
+    image: mysql:8.0
+    container_name: my-mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306" # Maps localhost:3307 to container:3306 (avoids conflict if you have local MySQL)
+    networks:
+      - my-app-network
+
+  # 2. The Backend Service
+  backend:
+    build: ./backend  # Path to the folder with the Dockerfile
+    container_name: my-spring-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db # Waits for DB to start
+    environment:
+      DB_URL: jdbc:mysql://mysql-db:3306/mydb
+      DB_USERNAME: user
+      DB_PASSWORD: password
+    networks:
+      - my-app-network
+
+  # 3. The Frontend Service
+  frontend:
+    build: ./frontend # Path to the folder with the Dockerfile
+    container_name: my-angular-frontend
+    ports:
+      - "80:80" # Access app at http://localhost
+    networks:
+      - my-app-network
+
+networks:
+  my-app-network:
+    driver: bridge
