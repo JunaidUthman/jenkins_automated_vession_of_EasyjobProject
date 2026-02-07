@@ -3,7 +3,7 @@ pipeline {
 
     // 1. Define the tools we configured in Step 1
     tools {
-        jdk 'jdk17'
+        //jdk 'jdk17'
         maven 'maven3'
         nodejs 'node18'
     }
