@@ -38,7 +38,7 @@ public class SecurityConfig {// this class(esspecially SecurityFilterChain) inte
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new org.springframework.web.cors.CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:4200")); // only your frontend
+                    config.setAllowedOrigins(List.of("http://localhost:4200","http://localhost")); // only your frontend
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setExposedHeaders(List.of("Authorization"));
