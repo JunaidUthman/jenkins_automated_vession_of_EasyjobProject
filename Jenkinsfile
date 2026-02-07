@@ -1,90 +1,83 @@
 pipeline {
-    agent any
+    agent none  // No default agent, we assign per stage
 
-    // 1. Define the tools we configured in Step 1
-    tools {
-        //jdk 'jdk17'
-        maven 'maven3'
-        nodejs 'node18'
-    }
-
-    // 2. Define variables (Environment variables)
     environment {
-        // Your Docker Hub Username
-        DOCKER_HUB_USER = 'junaiduthman' 
-        // A unique tag for this build (using the Jenkins Build Number)
+        DOCKER_HUB_USER = 'junaiduthman'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        // The ID you created in Step 2
         REGISTRY_CREDS = 'docker-hub-credentials'
     }
 
     stages {
-        
-        // --- Stage A: Get the code ---
+
+        // --- Stage 1: Checkout Code ---
         stage('Checkout Code') {
+            agent { label 'backend agent' }  // Pull code on backend agent
             steps {
-                // Pulls code from the repo where this Jenkinsfile lives
-                checkout scm 
+                checkout scm
             }
         }
 
-        // --- Stage B: Compile & Test Backend ---
+        // --- Stage 2: Build Backend ---
         stage('Build Backend (Spring)') {
+            agent { label 'backend agent' }
+            tools {
+                jdk 'jdk17'
+                maven 'maven3'
+            }
             steps {
-                dir('backend') { // Go into the 'backend' folder
+                dir('backend') {
                     echo 'Compiling Backend...'
-                    // Run Maven Wrapper or Maven tool
-                    sh 'mvn clean package -DskipTests' 
-                    // Ideally remove -DskipTests to actually run unit tests!
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        // --- Stage C: Compile Frontend ---
+        // --- Stage 3: Build Frontend ---
         stage('Build Frontend (Angular)') {
+            agent { label 'frontend agent' }
+            tools {
+                nodejs 'node18'
+            }
             steps {
-                dir('frontend') { // Go into the 'frontend' folder
+                dir('frontend') {
                     echo 'Compiling Frontend...'
                     sh 'npm install'
-                    sh 'npm run build' // Creates the 'dist' folder
+                    sh 'npm run build'
                 }
             }
         }
 
-        // --- Stage D: Build Docker Images ---
-        stage('Build Docker Images') {
-        environment {
-            DOCKER_HOST = 'tcp://host.docker.internal:2376'
-        }
-        steps {
-            script {
-                echo 'Building Docker Images...'
-
-                // Build Backend Image
-                def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
-
-                // Build Frontend Image
-                def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
-
-                // Login and Push to Docker Hub
-                docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDS) {
-                    backendImage.push()
-                    backendImage.push('latest')
-
-                    frontendImage.push()
-                    frontendImage.push('latest')
+        // --- Stage 4: Build & Push Docker Images ---
+        stage('Build & Push Docker Images') {
+            agent { label 'dockerhub agent' }  // Dedicated Docker push agent
+            tools {
+                jdk 'jdk17'  // optional if your Docker images need Java
+            }
+            steps {
+                script {
+                    echo 'Building Docker Images...'
+                    
+                    // Build backend image
+                    def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
+                    
+                    // Build frontend image
+                    def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
+                    
+                    // Push to Docker Hub using global credentials
+                    docker.withRegistry('', REGISTRY_CREDS) {
+                        backendImage.push()
+                        backendImage.push('latest')
+                        frontendImage.push()
+                        frontendImage.push('latest')
+                    }
                 }
             }
         }
     }
 
-    }
-    
-    // 3. Post-build actions (Notifications/Cleanup)
     post {
         always {
-            // Clean up workspace to save disk space
-            cleanWs() 
+            cleanWs()  // Clean workspace on all agents
             echo 'Pipeline finished.'
         }
         success {
