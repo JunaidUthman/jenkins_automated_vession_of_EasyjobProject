@@ -53,29 +53,31 @@ pipeline {
 
         // --- Stage D: Build Docker Images ---
         stage('Build Docker Images') {
-            steps {
-                script {
-                    echo 'Building Docker Images...'
-                    
-                    // Build Backend Image
-                    // This looks for a Dockerfile in ./backend
-                    def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
-                    
-                    // Build Frontend Image
-                    // This looks for a Dockerfile in ./frontend
-                    def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
-                    
-                    // Log in to Docker Hub and Push
-                    docker.withRegistry('', REGISTRY_CREDS) {
-                        backendImage.push()
-                        backendImage.push('latest') // Also update the 'latest' tag
-                        
-                        frontendImage.push()
-                        frontendImage.push('latest')
-                    }
+        environment {
+            DOCKER_HOST = 'tcp://host.docker.internal:2376'
+        }
+        steps {
+            script {
+                echo 'Building Docker Images...'
+
+                // Build Backend Image
+                def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
+
+                // Build Frontend Image
+                def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
+
+                // Login and Push to Docker Hub
+                docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDS) {
+                    backendImage.push()
+                    backendImage.push('latest')
+
+                    frontendImage.push()
+                    frontendImage.push('latest')
                 }
             }
         }
+    }
+
     }
     
     // 3. Post-build actions (Notifications/Cleanup)
