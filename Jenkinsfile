@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        --- Stage 2: Build Backend ---
+        //--- Stage 2: Build Backend ---
         stage('Build Backend (Spring)') {
             agent { label 'backend-agent' }
             tools {
