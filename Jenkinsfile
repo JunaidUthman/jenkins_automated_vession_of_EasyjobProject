@@ -81,8 +81,9 @@ pipeline {
 
     post {
         always {
-            node { 
-                cleanWs() 
+            // Must specify a label for node here in Declarative Pipeline
+            node(label: 'backend-agent') {
+                cleanWs()
                 echo 'Pipeline finished.'
             }
         }
@@ -93,4 +94,5 @@ pipeline {
             echo 'Pipeline failed. Check the logs!'
         }
     }
+
 }
