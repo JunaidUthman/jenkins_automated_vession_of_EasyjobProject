@@ -18,35 +18,35 @@ pipeline {
         }
 
         // --- Stage 2: Build Backend ---
-        stage('Build Backend (Spring)') {
-            agent { label 'backend-agent' }
-            tools {
-                jdk 'jdk17'
-                maven 'maven3'
-            }
-            steps {
-                dir('backend') {
-                    echo 'Compiling Backend...'
-                    sh 'mvn clean package -DskipTests'
-                }
-            }
-        }
+        // stage('Build Backend (Spring)') {
+        //     agent { label 'backend-agent' }
+        //     tools {
+        //         jdk 'jdk17'
+        //         maven 'maven3'
+        //     }
+        //     steps {
+        //         dir('backend') {
+        //             echo 'Compiling Backend...'
+        //             sh 'mvn clean package -DskipTests'
+        //         }
+        //     }
+        // }
 
-        // --- Stage 3: Build Frontend ---
-        stage('Build Frontend (Angular)') {
-            agent { label 'frontend-agent' }
-            tools {
-                nodejs 'node18'
-            }
-            steps {
-                dir('frontend') {
-                    echo 'Compiling Frontend...'
-                     sh 'node -v'   // verifies Node is installed
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
+        // // --- Stage 3: Build Frontend ---
+        // stage('Build Frontend (Angular)') {
+        //     agent { label 'frontend-agent' }
+        //     tools {
+        //         nodejs 'node18'
+        //     }
+        //     steps {
+        //         dir('frontend') {
+        //             echo 'Compiling Frontend...'
+        //              sh 'node -v'   // verifies Node is installed
+        //             sh 'npm install'
+        //             sh 'npm run build'
+        //         }
+        //     }
+        // }
 
         // --- Stage 4: Build & Push Docker Images ---
         stage('Build & Push Docker Images') {
