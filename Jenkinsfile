@@ -5,6 +5,9 @@ pipeline {
         DOCKER_HUB_USER = 'junaiduthman'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         REGISTRY_CREDS = 'docker-hub-credentials'
+        // tell Docker CLI to use the TCP socket where socat forwards the host daemon
+        DOCKER_HOST = 'tcp://host.docker.internal:2376'
+
     }
 
     stages {
