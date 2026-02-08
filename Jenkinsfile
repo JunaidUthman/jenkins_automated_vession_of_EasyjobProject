@@ -21,19 +21,19 @@ pipeline {
         }
 
         //--- Stage 2: Build Backend ---
-        stage('Build Backend (Spring)') {
-            agent { label 'backend-agent' }
-            tools {
-                jdk 'jdk17'
-                maven 'maven3'
-            }
-            steps {
-                dir('backend') {
-                    echo 'Compiling Backend...'
-                    sh 'mvn clean package -DskipTests'
-                }
-            }
-        }
+        // stage('Build Backend (Spring)') {
+        //     agent { label 'backend-agent' }
+        //     tools {
+        //         jdk 'jdk17'
+        //         maven 'maven3'
+        //     }
+        //     steps {
+        //         dir('backend') {
+        //             echo 'Compiling Backend...'
+        //             sh 'mvn clean package -DskipTests'
+        //         }
+        //     }
+        // }
 
         // --- Stage 3: Build Frontend ---
         stage('Build Frontend (Angular)') {
@@ -52,31 +52,31 @@ pipeline {
         }
 
         // --- Stage 4: Build & Push Docker Images ---
-        stage('Build & Push Docker Images') {
-            agent { label 'dockerhub-agent' }  // Dedicated Docker push agent
-            tools {
-                jdk 'jdk17'  // optional if your Docker images need Java
-            }
-            steps {
-                script {
-                    echo 'Building Docker Images...'
+        // stage('Build & Push Docker Images') {
+        //     agent { label 'dockerhub-agent' }  // Dedicated Docker push agent
+        //     tools {
+        //         jdk 'jdk17'  // optional if your Docker images need Java
+        //     }
+        //     steps {
+        //         script {
+        //             echo 'Building Docker Images...'
                     
-                    // Build backend image
-                    def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
+        //             // Build backend image
+        //             def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
                     
-                    // Build frontend image
-                    def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
+        //             // Build frontend image
+        //             def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
                     
-                    // Push to Docker Hub using global credentials
-                    docker.withRegistry('', REGISTRY_CREDS) {
-                        backendImage.push()
-                        backendImage.push('latest')
-                        frontendImage.push()
-                        frontendImage.push('latest')
-                    }
-                }
-            }
-        }
+        //             // Push to Docker Hub using global credentials
+        //             docker.withRegistry('', REGISTRY_CREDS) {
+        //                 backendImage.push()
+        //                 backendImage.push('latest')
+        //                 frontendImage.push()
+        //                 frontendImage.push('latest')
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
