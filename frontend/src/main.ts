@@ -1,4 +1,4 @@
-import { bootstrapApplication } from '@angular/platform-browserrrr';
+import { bootstrapApplication } from '@angular/platform-browserrrradd another probleme';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
