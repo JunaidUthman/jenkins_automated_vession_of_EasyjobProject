@@ -1,39 +1,49 @@
 pipeline {
-    agent none  // No default agent, we assign per stage
+    agent none
 
     environment {
         DOCKER_HUB_USER = 'junaiduthman'
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        IMAGE_TAG = "pr-${env.BUILD_NUMBER}"
         REGISTRY_CREDS = 'docker-hub-credentials'
-        // tell Docker CLI to use the TCP socket where socat forwards the host daemon
         DOCKER_HOST = 'tcp://host.docker.internal:2376'
-
     }
 
     stages {
 
-        // --- Stage 1: Checkout Code ---
-        stage('Checkout Code') {
-            agent { label 'backend-agent' }  // Pull code on backend agent
+        // --- Stage 1: Checkout & Info ---
+        stage('Checkout & Info') {
+            agent { label 'backend-agent' }
             steps {
+                script {
+                    // 1. Cosmetic: Label the build in Jenkins UI
+                    if (env.CHANGE_ID) {
+                        echo "Building Pull Request #${env.CHANGE_ID}"
+                        currentBuild.description = "PR #${env.CHANGE_ID}"
+                    } else {
+                        echo "Building Branch: ${env.BRANCH_NAME}"
+                        currentBuild.description = "Branch: ${env.BRANCH_NAME}"
+                    }
+                }
+                // 2. The critical step: Standard Checkout
                 checkout scm
             }
         }
 
-        //--- Stage 2: Build Backend ---
-        // stage('Build Backend (Spring)') {
-        //     agent { label 'backend-agent' }
-        //     tools {
-        //         jdk 'jdk17'
-        //         maven 'maven3'
-        //     }
-        //     steps {
-        //         dir('backend') {
-        //             echo 'Compiling Backend...'
-        //             sh 'mvn clean package -DskipTests'
-        //         }
-        //     }
-        // }
+        // --- Stage 2: Build Backend ---
+        stage('Build Backend (Spring)') {
+            agent { label 'backend-agent' }
+            tools {
+                jdk 'jdk17'
+                maven 'maven3'
+            }
+            steps {
+                dir('backend') {
+                    echo 'Compiling Backend...'
+                    // Skip tests for speed in PRs, or remove -DskipTests to run them
+                    sh 'mvn clean package -DskipTests'  
+                }
+            }
+        }
 
         // --- Stage 3: Build Frontend ---
         stage('Build Frontend (Angular)') {
@@ -44,55 +54,43 @@ pipeline {
             steps {
                 dir('frontend') {
                     echo 'Compiling Frontend...'
-                    //  sh 'node -v'   // verifies Node is installed
                     // sh 'npm install'
                     // sh 'npm run build'
                 }
             }
         }
 
-        // --- Stage 4: Build & Push Docker Images ---
-        // stage('Build & Push Docker Images') {
-        //     agent { label 'dockerhub-agent' }  // Dedicated Docker push agent
-        //     tools {
-        //         jdk 'jdk17'  // optional if your Docker images need Java
-        //     }
-        //     steps {
-        //         script {
-        //             echo 'Building Docker Images...'
+        // --- Stage 4: Build Lightweight Docker Images ---
+        stage('Build Lightweight Docker Images') {
+            agent { label 'dockerhub-agent' }
+            steps {
+                script {
+                    echo 'Building lightweight Docker images for verification...'
                     
-        //             // Build backend image
-        //             def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
+                    // Build backend
+                    docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "--pull --no-cache ./backend")
                     
-        //             // Build frontend image
-        //             def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
+                    // Build frontend
+                    docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "--pull --no-cache ./frontend")
                     
-        //             // Push to Docker Hub using global credentials
-        //             docker.withRegistry('', REGISTRY_CREDS) {
-        //                 backendImage.push()
-        //                 backendImage.push('latest')
-        //                 frontendImage.push()
-        //                 frontendImage.push('latest')
-        //             }
-        //         }
-        //     }
-        // }
+                    echo 'Images built successfully. (No push performed)'
+                }
+            }
+        }
     }
 
     post {
         always {
-            // Must specify a label for node here in Declarative Pipeline
             node(label: 'backend-agent') {
                 cleanWs()
-                echo 'Pipeline finished.'
+                echo 'Workspace cleaned.'
             }
         }
         success {
-            echo 'Great success! Images pushed to Docker Hub.'
+            echo 'PR Head build successful! ready for review.'
         }
         failure {
-            echo 'Pipeline failed. Check the logs!'
+            echo 'Build failed. Please fix errors and push again.'
         }
     }
-
 }
