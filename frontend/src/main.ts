@@ -1,4 +1,4 @@
-import { bootstrapApplication } from '@angular/platform-browser';//test  webhook
+import { bootstrapApplication } from '@angular/platform-browser';//test if the pipiline only run if it finds PRs
 import { AppComponent } from './app/app.component';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
