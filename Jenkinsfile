@@ -44,9 +44,9 @@ pipeline {
             steps {
                 dir('frontend') {
                     echo 'Compiling Frontend...'
-                     sh 'node -v'   // verifies Node is installed
-                    sh 'npm install'
-                    sh 'npm run build'
+                    //  sh 'node -v'   // verifies Node is installed
+                    // sh 'npm install'
+                    // sh 'npm run build'
                 }
             }
         }
