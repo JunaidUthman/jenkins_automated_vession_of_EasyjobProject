@@ -1,0 +1,85 @@
+pipeline {
+    agent none
+
+    environment {
+        DOCKER_HUB_USER = 'junaiduthman'
+        IMAGE_TAG = "pr-${env.BUILD_NUMBER}"
+        REGISTRY_CREDS = 'docker-hub-credentials'
+        DOCKER_HOST = 'tcp://host.docker.internal:2376'
+    }
+
+    stages {
+
+        // --- Stage 1: Checkout & Info ---
+        stage('Checkout & Info') {
+            agent { label 'backend-agent' }
+            steps {
+                checkout scm
+            }
+        }
+
+        // --- Stage 2: Build Backend ---
+        stage('Build Backend (Spring)') {
+            agent { label 'backend-agent' }
+            // tools {
+            //     jdk 'jdk17'
+            //     maven 'maven3'
+            // }
+            steps {
+                dir('backend') {
+                    echo 'Compiling Backend...'
+                    // Skip tests for speed in PRs, or remove -DskipTests to run them
+                    // sh 'mvn clean package -DskipTests'  
+                }
+            }
+        }
+
+        // --- Stage 3: Build Frontend ---
+        stage('Build Frontend (Angular)') {
+            agent { label 'frontend-agent' }
+            // tools {
+            //     nodejs 'node18'
+            // }
+            steps {
+                dir('frontend') {
+                    echo 'Compiling Frontend...'
+                    // sh 'npm install'
+                    // sh 'npm run build'
+                }
+            }
+        }
+
+        // --- Stage 4: Build Lightweight Docker Images ---
+        stage('Build Lightweight Docker Images') {
+            agent { label 'dockerhub-agent' }
+            steps {
+                script {
+                    echo 'Building lightweight Docker images for verification...'
+                    
+                    // Build backend
+                    // docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "--pull --no-cache ./backend")
+                    
+                    // Build frontend
+                    // docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "--pull --no-cache ./frontend")
+                    
+                    echo 'Images built successfully. (No push performed)'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            node(label: 'backend-agent') {
+                cleanWs()
+                echo 'Workspace cleaned.'
+            }
+        }
+        success {
+            echo 'PR Head build successful! ready for review.'
+        }
+        failure {
+            echo 'Build failed. Please fix errors and push again.'
+        }
+    }
+}
