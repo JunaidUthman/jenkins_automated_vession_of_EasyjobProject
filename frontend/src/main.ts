@@ -1,4 +1,4 @@
-import { bootstrapApplication } from '@angular/platform-browser';//test if the pipiline only run if it finds PRs(2)
+import { bootstrapApplication } from '@angular/platform-browser';//test if the pipiline only run if it finds PRs and also runs pr-merge properly(2)
 import { AppComponent } from './app/app.component';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './app/interceptors/auth.interceptor';
