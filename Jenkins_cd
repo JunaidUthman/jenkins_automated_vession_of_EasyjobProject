@@ -1,0 +1,105 @@
+pipeline {
+    agent none
+
+    environment {
+        DOCKER_HUB_USER = 'junaiduthman'
+        IMAGE_TAG = "latest"              // Final tag for main branch
+        REGISTRY_CREDS = 'docker-hub-credentials'
+        DOCKER_HOST = 'tcp://host.docker.internal:2376'
+    }
+
+    stages {
+
+        // --- Stage 1: Checkout main ---
+        stage('Checkout Main') {
+            agent { label 'backend-agent' }
+            steps {
+                script {
+                    if (env.BRANCH_NAME != 'main') {
+                        error "This pipeline should only run on 'main' branch!"
+                    }
+                    currentBuild.description = "Main Merge Build"
+                }
+                checkout scm
+            }
+        }
+
+        // --- Stage 2: Build Backend ---
+        stage('Build Backend (Spring)') {
+            agent { label 'backend-agent' }
+            // tools {
+            //     jdk 'jdk17'
+            //     maven 'maven3'
+            // }
+            steps {
+                dir('backend') {
+                    echo 'Compiling Backend for Production...'
+                    // sh 'mvn clean package -DskipTests=false' // Run tests in production
+                }
+            }
+        }
+
+        // --- Stage 3: Build Frontend ---
+        stage('Build Frontend (Angular)') {
+            agent { label 'frontend-agent' }
+            // tools {
+            //     nodejs 'node18'
+            // }
+            steps {
+                dir('frontend') {
+                    echo 'Compiling Frontend for Production...'
+                    // sh 'npm install'
+                    // sh 'npm run build --prod'
+                }
+            }
+        }
+
+        // --- Stage 4: Build & Push Docker Images ---
+        stage('Build & Push Docker Images') {
+            agent { label 'dockerhub-agent' }
+            steps {
+                script {
+                    echo 'Building final Docker images for main...'
+                    
+                    // Backend
+                    def backendImage = docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "./backend")
+                    docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDS) {
+                        backendImage.push()
+                    }
+                    
+                    // Frontend
+                    def frontendImage = docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "./frontend")
+                    docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDS) {
+                        frontendImage.push()
+                    }
+
+                    echo 'Docker images built and pushed successfully!'
+                }
+            }
+        }
+
+        // --- Stage 5: Cleanup old dangling images ---
+        stage('Cleanup Docker') {
+            agent { label 'dockerhub-agent' }
+            steps {
+                sh 'docker image prune -f'
+                echo 'Dangling Docker images cleaned.'
+            }
+        }
+    }
+
+    post {
+        always {
+            node(label: 'backend-agent') {
+                cleanWs()
+                echo 'Workspace cleaned.'
+            }
+        }
+        success {
+            echo 'Main merge build successful! Docker images deployed.'
+        }
+        failure {
+            echo 'Build failed! Check logs and fix errors.'
+        }
+    }
+}
