@@ -14,12 +14,6 @@ pipeline {
         stage('Checkout Main') {
             agent { label 'backend-agent' }
             steps {
-                script {
-                    if (env.BRANCH_NAME != 'main') {
-                        error "This pipeline should only run on 'main' branch!"
-                    }
-                    currentBuild.description = "Main Merge Build"
-                }
                 checkout scm
             }
         }
