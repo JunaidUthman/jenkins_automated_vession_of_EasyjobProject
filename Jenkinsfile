@@ -32,10 +32,10 @@ pipeline {
         // --- Stage 2: Build Backend ---
         stage('Build Backend (Spring)') {
             agent { label 'backend-agent' }
-            tools {
-                // jdk 'jdk17'
-                // maven 'maven3'
-            }
+            // tools {
+            //     // jdk 'jdk17'
+            //     // maven 'maven3'
+            // }
             steps {
                 dir('backend') {
                     echo 'Compiling Backend...'
@@ -48,9 +48,9 @@ pipeline {
         // --- Stage 3: Build Frontend ---
         stage('Build Frontend (Angular)') {
             agent { label 'frontend-agent' }
-            tools {
-                // nodejs 'node18'
-            }
+            // tools {
+            //     // nodejs 'node18'
+            // }
             steps {
                 dir('frontend') {
                     echo 'Compiling Frontend...'
