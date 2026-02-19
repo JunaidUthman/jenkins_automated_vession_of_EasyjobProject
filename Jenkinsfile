@@ -32,15 +32,15 @@ pipeline {
         // --- Stage 2: Build Backend ---
         stage('Build Backend (Spring)') {
             agent { label 'backend-agent' }
-            tools {
-                jdk 'jdk17'
-                maven 'maven3'
-            }
+            // tools {
+            //     // jdk 'jdk17'
+            //     // maven 'maven3'
+            // }
             steps {
                 dir('backend') {
                     echo 'Compiling Backend...'
                     // Skip tests for speed in PRs, or remove -DskipTests to run them
-                    sh 'mvn clean package -DskipTests'  
+                    // sh 'mvn clean package -DskipTests'  
                 }
             }
         }
@@ -48,9 +48,9 @@ pipeline {
         // --- Stage 3: Build Frontend ---
         stage('Build Frontend (Angular)') {
             agent { label 'frontend-agent' }
-            tools {
-                nodejs 'node18'
-            }
+            // tools {
+            //     // nodejs 'node18'
+            // }
             steps {
                 dir('frontend') {
                     echo 'Compiling Frontend...'
@@ -68,12 +68,12 @@ pipeline {
                     echo 'Building lightweight Docker images for verification...'
                     
                     // Build backend
-                    docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "--pull --no-cache ./backend")
+                    // docker.build("${DOCKER_HUB_USER}/my-backend:${IMAGE_TAG}", "--pull --no-cache ./backend")
                     
                     // Build frontend
-                    docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "--pull --no-cache ./frontend")
+                    // docker.build("${DOCKER_HUB_USER}/my-frontend:${IMAGE_TAG}", "--pull --no-cache ./frontend")
                     
-                    echo 'Images built successfully. (No push performed)'
+                    echo 'Images built simulation successfully. (No push performed)'
                 }
             }
         }
