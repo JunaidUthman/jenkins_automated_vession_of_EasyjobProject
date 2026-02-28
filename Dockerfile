@@ -7,7 +7,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs libatomic1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Make sure Java is installed (already in jenkins/jenkins:lts)
+# Make sure Java is installed (already in jenkins/jenkins:lts) (test)
 RUN java -version
 
 USER jenkins
